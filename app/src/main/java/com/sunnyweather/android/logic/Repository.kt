@@ -1,12 +1,13 @@
 package com.sunnyweather.android.logic
 
 import androidx.lifecycle.liveData
-import com.sunnyweather.android.logic.model.Place
 import com.sunnyweather.android.logic.model.Weather
 import com.sunnyweather.android.logic.network.SunnyWeatherNetwork
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlin.coroutines.CoroutineContext
 
 /**
  * 单例类 仓库层
@@ -18,8 +19,7 @@ object Repository {
      * 功能：搜索城市数据
      * Dispatchers.IO 子线程 进行网络请求
      */
-    fun searchPlaces(query: String) = liveData(Dispatchers.IO){
-        val result = try {
+    fun searchPlaces(query: String) = fire(Dispatchers.IO){
             val placeResponse =
                 SunnyWeatherNetwork.searchPlaces(query)
             if (placeResponse.status == "ok") {
@@ -28,54 +28,59 @@ object Repository {
             } else {
                 Result.failure(RuntimeException("response status is ${placeResponse.status}"))
             }
-        } catch (e: Exception) {
-            Result.failure<List<Place>>(e)
-        }
-        // 通知数据的变化
-        // Set's the LiveData's value to the given value
-        emit(result)
     }
 
-    fun refreshWeather(lng:String, lat:String) = liveData(Dispatchers.IO)
+    /**
+     * 刷新天气信息
+     */
+    fun refreshWeather(lng:String, lat:String) = fire(Dispatchers.IO)
     {
-        val result = try {
+        /**
+         * Creates a CoroutineScope and calls the specified suspend block with this scope.
+         */
+        coroutineScope {
             /**
-             * 创建协程作用域
+             * 并发执行
              */
-            coroutineScope {
-                /**
-                 * 并发执行
-                 */
-                val deferredRealtime = async {
-                    SunnyWeatherNetwork.getRealtimeWeather(lng, lat)
-                }
-                val deferredDaily = async {
-                    SunnyWeatherNetwork.getDailyWeather(lng, lat)
-                }
-
-                /**
-                 * 同时得到响应结果后，才能进一步执行程序
-                 */
-                val realtimeResponse = deferredRealtime.await()
-                val dailyResponse = deferredDaily.await()
-                if (realtimeResponse.status == "ok" && dailyResponse.status == "ok") {
-                    val weather =
-                        Weather(realtimeResponse.result.realtime, dailyResponse.result.daily)
-                    Result.success(weather)
-                } else {
-                    // 包装异常信息
-                    Result.failure(
-                        RuntimeException(
-                            "realtime response status is ${realtimeResponse.status}\n" +
-                                    "daily response.status is ${dailyResponse.status}"
-                        )
-                    )
-                }
+            val deferredRealtime = async {
+                SunnyWeatherNetwork.getRealtimeWeather(lng, lat)
             }
-        } catch (e: Exception) {
-            Result.failure<Weather>(e)
+            val deferredDaily = async {
+                SunnyWeatherNetwork.getDailyWeather(lng, lat)
+            }
+
+            /**
+             * 同时得到响应结果后，才能进一步执行程序
+             */
+            val realtimeResponse = deferredRealtime.await()
+            val dailyResponse = deferredDaily.await()
+            if (realtimeResponse.status == "ok" && dailyResponse.status == "ok") {
+                val weather =
+                    Weather(realtimeResponse.result.realtime, dailyResponse.result.daily)
+                Result.success(weather)
+            } else {
+                // 包装异常信息
+                Result.failure(
+                    RuntimeException(
+                        "realtime response status is ${realtimeResponse.status}\n" +
+                                "daily response.status is ${dailyResponse.status}"
+                    )
+                )
+            }
         }
-        // 将包装的结果发射出去
-        emit(result)
     }
+
+    /**
+     * 按照liveData()函数的参数接收标准定义的一个高阶函数
+     * 简化 try catch 异常捕获语句
+     */
+    private fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
+        liveData<Result<T>>(context) {
+            val result = try {
+                block()
+            } catch (e: Exception) {
+                Result.failure<T>(e)
+            }
+            emit(result)
+        }
 }
