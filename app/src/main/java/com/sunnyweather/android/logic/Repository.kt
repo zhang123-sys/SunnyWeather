@@ -7,6 +7,9 @@ import kotlinx.coroutines.Dispatchers
 
 
 object Repository {
+    /**
+     * Dispatchers.IO 子线程
+     */
     fun searchPlaces(query: String) = liveData(Dispatchers.IO){
         val result = try {
             val placeResponse =
