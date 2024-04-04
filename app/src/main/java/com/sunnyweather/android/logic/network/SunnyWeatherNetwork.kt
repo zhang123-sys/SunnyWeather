@@ -9,7 +9,26 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+/**
+ * 网络数据源访问入口
+ */
 object SunnyWeatherNetwork {
+    /**
+     * 创建动态代理对象
+     */
+    private val weatherService =
+//        ServiceCreator.create(WeatherService::class.java)
+        ServiceCreator.create<WeatherService>()
+
+    /**
+     * 挂起函数
+     */
+    suspend fun getDailyWeather(lng: String, lat: String) =
+        weatherService.getDailyWeather(lng, lat).await()
+
+    suspend fun getRealtimeWeather(lng:String, lat: String) =
+        weatherService.getRealtimeWeather(lng = lng, lat = lat).await()
+
     /**
      * 创建动态代理对象
      */
