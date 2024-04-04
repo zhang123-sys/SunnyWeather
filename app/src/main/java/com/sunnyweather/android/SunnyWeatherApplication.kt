@@ -5,11 +5,17 @@ import android.app.Application
 import android.content.Context
 
 class SunnyWeatherApplication: Application() {
-    @SuppressLint("StaticFieldLeak")
+
     companion object{
-        lateinit var context: Context
+        /**
+         * 申请到的令牌值
+         */
         const val TOKEN="eH17ygqCINjRRgwD"
+
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
     }
+
     override fun onCreate() {
         super.onCreate()
         context = applicationContext

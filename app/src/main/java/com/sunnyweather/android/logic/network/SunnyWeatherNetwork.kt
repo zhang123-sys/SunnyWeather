@@ -10,6 +10,9 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object SunnyWeatherNetwork {
+    /**
+     * 创建动态代理对象
+     */
     private val placeService=
         ServiceCreator.create<PlaceService>()
 
@@ -23,6 +26,7 @@ object SunnyWeatherNetwork {
      * 借助协程技术实现
      */
     private suspend fun <T> Call<T>.await():T{
+        // suspendCoroutine 挂起当前协程
         return suspendCoroutine { continuation ->
             enqueue(object : Callback<T>{
                 override fun onResponse(call: Call<T>, response: Response<T>) {
