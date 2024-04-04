@@ -73,11 +73,13 @@ class PlaceFragment: Fragment() {
                 bgImageView.visibility=View.GONE
                 viewModel.placeList.clear()
                 viewModel.placeList.addAll(places)
+                // 通知PlaceAdapter刷新界面
                 adapter.notifyDataSetChanged()
             }
             else
             {
                 Toast.makeText(activity, "未能查询到任何地点", Toast.LENGTH_SHORT).show()
+                // 打印具体的异常原因
                 result.exceptionOrNull()?.printStackTrace()
             }
         }
