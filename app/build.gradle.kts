@@ -46,6 +46,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    // livedata
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
