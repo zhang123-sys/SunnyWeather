@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sunnyweather.android.MainActivity
 import com.sunnyweather.android.R
 import com.sunnyweather.android.ui.weather.WeatherActivity
 
@@ -42,7 +43,8 @@ class PlaceFragment: Fragment() {
         /**
          * 判断是否已经有存储的城市数据
          */
-        if (viewModel.isPlaceSaved())
+        // 当PlaceFragment被嵌入MainActivity中，并且之前已经存在选中的城市
+        if (activity is MainActivity && viewModel.isPlaceSaved())
         {
             // 获取已存储的数据
             val place = viewModel.getSavedPlace()

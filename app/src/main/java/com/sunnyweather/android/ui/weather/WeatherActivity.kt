@@ -1,13 +1,17 @@
 package com.sunnyweather.android.ui.weather
 
+import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import com.sunnyweather.android.R
 import com.sunnyweather.android.databinding.ActivityWeatherBinding
@@ -21,6 +25,8 @@ class WeatherActivity : AppCompatActivity() {
         ViewModelProvider(this).get(WeatherViewModel::class.java)
     }
     private lateinit var binding:ActivityWeatherBinding
+    lateinit var drawerLayout:DrawerLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val decorView = window.decorView
@@ -29,6 +35,7 @@ class WeatherActivity : AppCompatActivity() {
         window.statusBarColor=Color.TRANSPARENT
 //        setContentView(R.layout.activity_weather)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
+        drawerLayout = binding.drawerLayout
         setContentView(binding.root)
 
         if (viewModel.locationLng.isEmpty())
@@ -62,6 +69,28 @@ class WeatherActivity : AppCompatActivity() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             refreshWeather()
         }
+        binding.nowLayout.navBtn.setOnClickListener {
+            // 打开滑动菜单
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+        // 监听drawerLayout的状态
+        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener{
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                // 隐藏输入法
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+
+        })
     }
 
     /**
