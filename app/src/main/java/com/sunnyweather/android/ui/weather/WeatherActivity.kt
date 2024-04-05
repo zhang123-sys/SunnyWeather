@@ -30,6 +30,7 @@ class WeatherActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_weather)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         if (viewModel.locationLng.isEmpty())
         {
             viewModel.locationLng = intent.getStringExtra("location_lng") ?: ""
@@ -52,8 +53,23 @@ class WeatherActivity : AppCompatActivity() {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
+            // 隐藏刷新进度条
+            binding.swipeRefreshLayout.isRefreshing=false
         }
+        // 设置下拉刷新进度条的颜色
+        binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
+        refreshWeather()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refreshWeather()
+        }
+    }
+
+    /**
+     * 刷新天气信息
+     */
+    fun refreshWeather(){
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        binding.swipeRefreshLayout.isRefreshing=true
     }
 
     /**

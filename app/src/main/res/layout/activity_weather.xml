@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--使用ScrollView通过滚动的方式查看屏幕以外的内容-->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/weatherLayout"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:overScrollMode="never"
-    android:visibility="invisible"
     tools:context=".ui.weather.WeatherActivity">
-<!--    android:overScrollMode="never" 设置滑动到边缘时无效果模式-->
-<!--    android:scrollbars="none" 设置不显示滚动条-->
-    <LinearLayout
-        android:orientation="vertical"
+    <!--使用ScrollView通过滚动的方式查看屏幕以外的内容-->
+    <ScrollView
+        android:id="@+id/weatherLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        android:visibility="invisible"
         >
-        <include layout="@layout/now"
-            android:id="@+id/nowLayout"/>
-        <include layout="@layout/forecast"
-            android:id="@+id/forecastLayout"/>
-        <include layout="@layout/life_index"
-            android:id="@+id/lifeIndexLayout" />
-    </LinearLayout>
-</ScrollView>
+    <!--    android:overScrollMode="never" 设置滑动到边缘时无效果模式-->
+    <!--    android:scrollbars="none" 设置不显示滚动条-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <include layout="@layout/now"
+                android:id="@+id/nowLayout"/>
+            <include layout="@layout/forecast"
+                android:id="@+id/forecastLayout"/>
+            <include layout="@layout/life_index"
+                android:id="@+id/lifeIndexLayout" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
