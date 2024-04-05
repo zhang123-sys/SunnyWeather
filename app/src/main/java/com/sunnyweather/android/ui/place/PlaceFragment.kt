@@ -1,5 +1,6 @@
 package com.sunnyweather.android.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunnyweather.android.R
+import com.sunnyweather.android.ui.weather.WeatherActivity
 
 class PlaceFragment: Fragment() {
     /**
@@ -37,6 +39,23 @@ class PlaceFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /**
+         * 判断是否已经有存储的城市数据
+         */
+        if (viewModel.isPlaceSaved())
+        {
+            // 获取已存储的数据
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                val location = place.location
+                putExtra("location_lng", location.lng)
+                putExtra("location_lat", location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val bgImageView = view.findViewById<ImageView>(R.id.bgImageView)
         val layoutManager = LinearLayoutManager(activity)

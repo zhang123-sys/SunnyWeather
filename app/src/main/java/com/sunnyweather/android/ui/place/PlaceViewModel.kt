@@ -1,6 +1,5 @@
 package com.sunnyweather.android.ui.place
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
@@ -31,4 +30,13 @@ class PlaceViewModel: ViewModel() {
     {
         searchLiveData.value=query
     }
+
+    /**
+     * 调用仓库层相应的接口
+     */
+    fun savePlace(place:Place) = Repository.savePlace(place = place)
+
+    fun getSavedPlace() = Repository.getSavedPlace()
+
+    fun isPlaceSaved() = Repository.isPlaceSaved()
 }
