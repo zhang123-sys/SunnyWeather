@@ -1,3 +1,4 @@
+import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,6 +22,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release"){
+            val keyPropertiesFile = file("../gradle.properties") // 假设你有一个包含签名信息的key.properties文件
+            val keyProperties = Properties()
+            try {
+                keyProperties.load(keyPropertiesFile.inputStream())
+                storeFile = file(keyProperties.getProperty("KEY_PATH"))
+                storePassword = file(keyProperties.getProperty("KEY_PASS")).toString()
+                keyAlias = file(keyProperties.getProperty("ALIAS_NAME")).toString()
+                keyPassword = file(keyProperties.getProperty("ALIAS_PASS")).toString()
+            }catch (e:Exception)
+            {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -28,6 +47,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

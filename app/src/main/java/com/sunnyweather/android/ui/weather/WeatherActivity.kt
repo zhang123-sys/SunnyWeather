@@ -21,6 +21,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class WeatherActivity : AppCompatActivity() {
+    /**
+     * Creates a new instance of the Lazy that uses the specified initialization function initializer and the default thread-safety mode LazyThreadSafetyMode.SYNCHRONIZED.
+     */
     val viewModel by lazy {
         ViewModelProvider(this).get(WeatherViewModel::class.java)
     }
