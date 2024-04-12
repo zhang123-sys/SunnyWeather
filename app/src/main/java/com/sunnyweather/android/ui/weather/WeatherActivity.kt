@@ -20,6 +20,9 @@ import com.sunnyweather.android.logic.model.getSky
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * 请求天气数据 将数据展示到界面上
+ */
 class WeatherActivity : AppCompatActivity() {
     /**
      * Creates a new instance of the Lazy that uses the specified initialization function initializer and the default thread-safety mode LazyThreadSafetyMode.SYNCHRONIZED.
@@ -32,6 +35,7 @@ class WeatherActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 实现 让背景图和状态栏融合到一起的效果
         val decorView = window.decorView
         decorView.systemUiVisibility=
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -40,7 +44,9 @@ class WeatherActivity : AppCompatActivity() {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         drawerLayout = binding.drawerLayout
         setContentView(binding.root)
-
+        /**
+         * 从Intent中取出经纬度坐标和地区名称
+         */
         if (viewModel.locationLng.isEmpty())
         {
             viewModel.locationLng = intent.getStringExtra("location_lng") ?: ""
@@ -53,9 +59,16 @@ class WeatherActivity : AppCompatActivity() {
         {
             viewModel.placeName = intent.getStringExtra("place_name") ?: ""
         }
+
+        /**
+         * 对weatherLiveData对象进行观察
+         */
         viewModel.weatherLiveData.observe(this){
             result->
             val weather = result.getOrNull()
+            /**
+             * 判断 是否获取到服务器返回的天气数据
+             */
             if (weather!=null){
                 showWeatherInfo(weather)
             }
@@ -108,7 +121,7 @@ class WeatherActivity : AppCompatActivity() {
      * 逻辑：从Weather对象中获取数据，然后显示到相应的控件上
      */
     private fun showWeatherInfo(weather: Weather) {
-        // TODO:
+        // 执行一次刷新天气的请求
         binding.nowLayout.placeName.text=viewModel.placeName
         val realtime = weather.realtime
         val daily = weather.daily
@@ -124,8 +137,10 @@ class WeatherActivity : AppCompatActivity() {
         forecastLayout.removeAllViews()
         val days = daily.skycon.size
         for (i in 0 until days){
+            // 处理每天的天气信息
             val skycon = daily.skycon[i]
             val temperature = daily.temperature[i]
+            // 动态加载R.layout.forecast_item布局并设置相应的数据，然后添加到父布局中
             val view =
                 LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false)
             val dateInfo = view.findViewById(R.id.dateInfo) as TextView
@@ -145,11 +160,11 @@ class WeatherActivity : AppCompatActivity() {
         // 填充life_index.xml布局中的数据
         val lifeIndex = daily.lifeIndex
         val lifeIndexLayout = binding.lifeIndexLayout
-        lifeIndexLayout.coldRiskImgText.text = lifeIndex.coldRisk[0].desc
+        lifeIndexLayout.coldRiskText.text = lifeIndex.coldRisk[0].desc
         lifeIndexLayout.dressingText.text = lifeIndex.dressing[0].desc
         lifeIndexLayout.ultravioletText.text = lifeIndex.ultraviolet[0].desc
         lifeIndexLayout.carWashingText.text = lifeIndex.carWashing[0].desc
-
+        // 让ScrollView变成可见状态
         binding.weatherLayout.visibility=View.VISIBLE
     }
 }

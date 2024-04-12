@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:layout_weight="1">
-<!--                图标-->
+                <!-- 图标-->
                 <ImageView
                     android:id="@+id/coldRiskImg"
                     android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                         />
 <!--                    指数-->
                     <TextView
-                        android:id="@+id/coldRiskImgText"
+                        android:id="@+id/coldRiskText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"

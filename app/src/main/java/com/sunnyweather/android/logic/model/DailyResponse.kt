@@ -3,6 +3,9 @@ package com.sunnyweather.android.logic.model
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
+/**
+ * 获取未来几天天气信息
+ */
 data class DailyResponse(val status:String, val result: Result) {
     data class Result(val daily: Daily)
 

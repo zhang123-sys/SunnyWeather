@@ -24,6 +24,7 @@ class PlaceAdapter(private val fragment:PlaceFragment, private val placeList: Li
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.place_item, parent, false)
         val holder = ViewHolder(view)
+        // 给最外层布局 注册 点击事件监听器
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val place = placeList[position]

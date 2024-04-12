@@ -1,14 +1,15 @@
 package com.sunnyweather.android.logic
 
+import android.util.Log
 import androidx.lifecycle.liveData
 import com.sunnyweather.android.logic.dao.PlaceDao
 import com.sunnyweather.android.logic.model.Place
 import com.sunnyweather.android.logic.model.Weather
 import com.sunnyweather.android.logic.network.SunnyWeatherNetwork
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlin.concurrent.thread
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -17,6 +18,7 @@ import kotlin.coroutines.CoroutineContext
  * 并将获得的数据返回给调用方
  */
 object Repository {
+    private const val TAG = "Repository"
     /**
      * 功能：搜索城市数据
      * Dispatchers.IO 子线程 进行网络请求
@@ -78,6 +80,7 @@ object Repository {
     /**
      * 按照liveData()函数的参数接收标准定义的一个高阶函数
      * 简化 try catch 异常捕获语句
+     * suspend 表示 传入Lambda表达式中的代码 拥有 挂起函数上下文
      */
     private fun <T> fire(context: CoroutineContext, block: suspend () -> Result<T>) =
         liveData<Result<T>>(context) {
@@ -90,8 +93,14 @@ object Repository {
             emit(result)
         }
 
-    fun savePlace(place:Place) = PlaceDao.savePlace(place = place)
-
+    // TODO: 开启线程来执行耗时任务 通过LiveData对象进行数据返回
+//    fun savePlace(place:Place) = PlaceDao.savePlace(place = place)
+    fun savePlace(place:Place){
+        /*thread {
+            Log.d(TAG, "savePlace: ")
+        }*/
+        return PlaceDao.savePlace(place = place)
+    }
     fun getSavedPlace() = PlaceDao.getSavedPlace()
 
     fun isPlaceSaved() = PlaceDao.isPlaceSaved()

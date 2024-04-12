@@ -2,8 +2,14 @@ package com.sunnyweather.android.logic.model
 
 import com.sunnyweather.android.R
 
+/**
+ * 表示 该天气情况所对应的文字、图标和背景
+ */
 class Sky(val info:String, val icon:Int, val bg:Int)
 
+/**
+ * 转换函数
+ */
 private val sky=mapOf(
     "CLEAR_DAY" to Sky("晴", R.drawable.ic_clear_day, R.drawable.bg_clear_day),
     "CLEAR_NIGHT" to Sky("晴", R.drawable.ic_clear_night, R.drawable.bg_clear_night),
