@@ -76,12 +76,13 @@ class WeatherActivity : AppCompatActivity() {
                 Toast.makeText(this, "无法成功获取天气信息", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
-            // 隐藏刷新进度条
+            // 表示刷新事件结束 隐藏刷新进度条
             binding.swipeRefreshLayout.isRefreshing=false
         }
         // 设置下拉刷新进度条的颜色
         binding.swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary)
         refreshWeather()
+        // 设置一个下拉刷新的监听器
         binding.swipeRefreshLayout.setOnRefreshListener {
             refreshWeather()
         }
@@ -91,19 +92,16 @@ class WeatherActivity : AppCompatActivity() {
         }
         // 监听drawerLayout的状态
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener{
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) = Unit
 
-            override fun onDrawerOpened(drawerView: View) {
-            }
+            override fun onDrawerOpened(drawerView: View) = Unit
+
+            override fun onDrawerStateChanged(newState: Int) {}
 
             override fun onDrawerClosed(drawerView: View) {
                 // 隐藏输入法
                 val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 manager.hideSoftInputFromWindow(drawerView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            }
-
-            override fun onDrawerStateChanged(newState: Int) {
             }
 
         })
@@ -114,6 +112,7 @@ class WeatherActivity : AppCompatActivity() {
      */
     fun refreshWeather(){
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        // 显示下拉刷新进度条
         binding.swipeRefreshLayout.isRefreshing=true
     }
 

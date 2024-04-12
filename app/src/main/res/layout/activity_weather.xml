@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 加入滑动菜单功能-->
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,14 +8,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.weather.WeatherActivity"
     >
-<!--    显示主屏幕中的内容-->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <!--    显示主屏幕中的内容-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+        <!-- SwipeRefreshLayout 实现下拉刷新功能-->
+
         <!--使用ScrollView通过滚动的方式查看屏幕以外的内容-->
         <ScrollView
             android:id="@+id/weatherLayout"
@@ -40,6 +42,7 @@
             </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <!--    显示滑动菜单中的内容-->
     <FrameLayout
         android:layout_width="match_parent"
@@ -49,6 +52,7 @@
         android:focusable="true"
         android:background="@color/colorPrimary"
         >
+        <!-- 添加了用于搜索全球城市数据的Fragment-->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/placeFragment"
             android:name="com.sunnyweather.android.ui.place.PlaceFragment"

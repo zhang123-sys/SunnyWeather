@@ -34,9 +34,8 @@ class PlaceAdapter(private val fragment:PlaceFragment, private val placeList: Li
              */
             if (activity is WeatherActivity)
             {
-                /**
-                 * 关闭滑动菜单
-                 */
+                // 不需要跳转，只要去请求新选择城市的天气信息
+                // 关闭滑动菜单
                 val weatherActivity = activity as WeatherActivity
                 weatherActivity.drawerLayout.closeDrawers()
                 weatherActivity.viewModel.locationLng=place.location.lng
@@ -46,7 +45,8 @@ class PlaceAdapter(private val fragment:PlaceFragment, private val placeList: Li
             }
             else
             {
-//                如果是在MainActivity中
+                // 如果是在MainActivity中
+                // 跳转界面
                 val intent = Intent(parent.context, WeatherActivity::class.java).
                 apply {
                     putExtra("location_lng", place.location.lng)
