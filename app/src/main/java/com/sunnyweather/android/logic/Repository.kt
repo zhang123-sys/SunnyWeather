@@ -24,10 +24,13 @@ object Repository {
     fun searchPlaces(query: String) = fire(Dispatchers.IO){
             val placeResponse =
                 SunnyWeatherNetwork.searchPlaces(query)
+            // 判断服务器相应的状态
             if (placeResponse.status == "ok") {
+                // 包装获取的城市数据列表
                 val places = placeResponse.places
                 Result.success(places)
             } else {
+                // 包装一个异常信息
                 Result.failure(RuntimeException("response status is ${placeResponse.status}"))
             }
     }
@@ -83,6 +86,7 @@ object Repository {
             } catch (e: Exception) {
                 Result.failure<T>(e)
             }
+            // 将包装的结果发射出去
             emit(result)
         }
 

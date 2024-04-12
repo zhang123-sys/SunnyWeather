@@ -20,7 +20,7 @@ import com.sunnyweather.android.ui.weather.WeatherActivity
 
 class PlaceFragment: Fragment() {
     /**
-     * 懒加载
+     * 使用 懒加载 技术 获取实例
      */
     val viewModel:PlaceViewModel by lazy {
         ViewModelProvider(this).get(PlaceViewModel::class.java)
@@ -60,20 +60,22 @@ class PlaceFragment: Fragment() {
         }
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val bgImageView = view.findViewById<ImageView>(R.id.bgImageView)
-        val layoutManager = LinearLayoutManager(activity)
-        // 设置 layoutManager
-        recyclerView.layoutManager=layoutManager
-        adapter= PlaceAdapter(this, placeList = viewModel.placeList)
-        // 设置 适配器
-        recyclerView.adapter=adapter
         val searchPlaceEdit = view.findViewById<EditText>(R.id.searchPlaceEdit)
+
+        val layoutManager = LinearLayoutManager(activity)
+        // 设置 LayoutManager
+        recyclerView.layoutManager=layoutManager
+        // 使用 viewModel.placeList 作为数据源
+        adapter = PlaceAdapter(this, placeList = viewModel.placeList)
+        // 设置 适配器
+        recyclerView.adapter = adapter
         // 监听搜索框内容的变化情况
         searchPlaceEdit.addTextChangedListener {
             editable: Editable? ->
             val content = editable.toString()
             if (content.isNotEmpty())
             {
-                // 发起搜索城市数据的网络请求了
+                // 发起搜索城市数据的网络请求
                 viewModel.searchPlaces(content)
             }
             else
@@ -88,6 +90,7 @@ class PlaceFragment: Fragment() {
         viewModel.placeLiveData.observe(viewLifecycleOwner){
             result ->
             val places = result.getOrNull()
+            // 判断数据数据是否为空
             if (places!=null)
             {
                 recyclerView.visibility=View.VISIBLE
@@ -99,6 +102,8 @@ class PlaceFragment: Fragment() {
             }
             else
             {
+                // 数据为空 说明发生了异常
+                // 弹出Toast提示
                 Toast.makeText(activity, "未能查询到任何地点", Toast.LENGTH_SHORT).show()
                 // 打印具体的异常原因
                 result.exceptionOrNull()?.printStackTrace()

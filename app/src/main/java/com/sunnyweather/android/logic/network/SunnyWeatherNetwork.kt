@@ -10,7 +10,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 /**
- * 网络数据源访问入口
+ * 单例类 统一的网络数据源访问入口
  */
 object SunnyWeatherNetwork {
     /**
@@ -37,6 +37,7 @@ object SunnyWeatherNetwork {
 
     /**
      * 挂起函数
+     * 发起搜索城市数据请求
      */
     suspend fun searchPlaces(query: String) =
         placeService.searchPlaces(query).await()
