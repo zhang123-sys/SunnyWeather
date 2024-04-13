@@ -24,7 +24,7 @@ android {
 
     signingConfigs {
         create("release"){
-            val keyPropertiesFile = file("../gradle.properties") // 假设你有一个包含签名信息的key.properties文件
+            val keyPropertiesFile = file("../gradle.properties") // 包含签名信息的.properties文件
             val keyProperties = Properties()
             try {
                 keyProperties.load(keyPropertiesFile.inputStream())
@@ -50,6 +50,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
