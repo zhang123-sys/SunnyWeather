@@ -104,7 +104,7 @@ class PlaceFragment: Fragment() {
             {
                 // 数据为空 说明发生了异常
                 // 弹出Toast提示
-                Toast.makeText(activity, "未能查询到任何地点", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.no_location_found), Toast.LENGTH_SHORT).show()
                 // 打印具体的异常原因
                 result.exceptionOrNull()?.printStackTrace()
             }

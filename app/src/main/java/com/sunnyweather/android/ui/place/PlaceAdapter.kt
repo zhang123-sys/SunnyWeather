@@ -14,10 +14,11 @@ import com.sunnyweather.android.ui.weather.WeatherActivity
 /**
  * RecyclerView的适配器
  */
-class PlaceAdapter(private val fragment:PlaceFragment, private val placeList: List<Place>): RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
+class PlaceAdapter(private val fragment:PlaceFragment, private val placeList: List<Place>):
+    RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
     inner class ViewHolder(view:View):RecyclerView.ViewHolder(view) {
-        val placeName = view.findViewById<TextView>(R.id.placeName)
-        val placeAddress = view.findViewById<TextView>(R.id.placeAddress)
+        val placeName: TextView = view.findViewById(R.id.placeName)
+        val placeAddress: TextView = view.findViewById(R.id.placeAddress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

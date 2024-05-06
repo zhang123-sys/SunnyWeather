@@ -7,4 +7,5 @@
     <string name="dressing">穿衣</string>
     <string name="ultraviolet">实时紫外线</string>
     <string name="car_washing">洗车</string>
+    <string name="no_location_found">未能查询到任何地点</string>
 </resources>
