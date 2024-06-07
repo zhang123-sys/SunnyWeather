@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sunnyweather.android.MainActivity
 import com.sunnyweather.android.R
+import com.sunnyweather.android.databinding.FragmentPlaceBinding
 import com.sunnyweather.android.ui.weather.WeatherActivity
 
 class PlaceFragment: Fragment() {
@@ -26,17 +27,22 @@ class PlaceFragment: Fragment() {
         ViewModelProvider(this).get(PlaceViewModel::class.java)
     }
     private lateinit var adapter: PlaceAdapter
+    private var _binding: FragmentPlaceBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_place, container, false)
+        _binding = FragmentPlaceBinding.inflate(inflater, container, false)
+//        return inflater.inflate(R.layout.fragment_place, container, false)
+        return binding.root
     }
-/*
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }*/
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,9 +64,9 @@ class PlaceFragment: Fragment() {
             activity?.finish()
             return
         }
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        val bgImageView = view.findViewById<ImageView>(R.id.bgImageView)
-        val searchPlaceEdit = view.findViewById<EditText>(R.id.searchPlaceEdit)
+        val recyclerView = binding.recyclerView // view.findViewById<RecyclerView>(R.id.recyclerView)
+        val bgImageView = binding.bgImageView // view.findViewById<ImageView>(R.id.bgImageView)
+        val searchPlaceEdit = binding.searchPlaceEdit // view.findViewById<EditText>(R.id.searchPlaceEdit)
 
         val layoutManager = LinearLayoutManager(activity)
         // 设置 LayoutManager
